@@ -9,7 +9,7 @@ import work.dto.event.get.certainevent.EventImageDto;
 import work.dto.event.get.certainevent.Host;
 import work.dto.event.get.search.EventImagesDto;
 
-import javax.persistence.SequenceGenerators;
+import jakarta.persistence.SequenceGenerators;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;

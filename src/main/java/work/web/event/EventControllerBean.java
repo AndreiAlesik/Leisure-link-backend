@@ -19,7 +19,7 @@ import work.dto.event.get.search.EventDto;
 import work.dto.event.get.search.NumberOfPages;
 import work.service.event.EventService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 

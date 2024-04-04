@@ -7,7 +7,7 @@ import work.dto.user.GetUserIdDTO;
 import work.dto.user.userdetails.GetUserDetailsDTO;
 import work.dto.user.userdetails.UpdateUserDetailsDTO;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 public interface UserService {
@@ -16,16 +16,6 @@ public interface UserService {
     ResponseObject createUser(User user);
 
     ResponseObject confirmRegistration(String code);
-
-    ResponseObject signin(User user);
-
-    ResponseObject sendEmailToPasswordReset(String email);
-
-    ResponseObject checkCodeForPasswordResetting(String code);
-
-    ResponseObject passwordResetting(String code, String password);
-
-    ResponseObject resetPassword(User user, String password);
 
     String refresh(String email);
 

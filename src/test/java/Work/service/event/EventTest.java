@@ -13,12 +13,11 @@ import work.dto.event.create.EventCreateDto;
 import work.repository.EventImageRepository;
 import work.repository.EventRepository;
 import work.repository.MemberRepository;
-import work.service.authentication.AuthenticationService;
 import work.service.event.EventServiceBean;
 import work.util.mapstruct.EventMapper;
 
-import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.ZonedDateTime;
 import java.util.*;
 

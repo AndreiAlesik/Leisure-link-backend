@@ -21,9 +21,9 @@ public class LeisureLinkBackend {
     public static void main(String[] args) {
         SpringApplication.run(LeisureLinkBackend.class, args);
     }
-
-    @Bean
-    public void initCategories(){
-        initializerBean.createCategoriesIfNotExist();
-    }
+//
+//    @Bean
+//    public void initCategories(){
+//        initializerBean.createCategoriesIfNotExist();
+//    }
 }

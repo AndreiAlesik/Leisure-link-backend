@@ -6,7 +6,6 @@ import work.dto.ResponseObject;
 import work.dto.user.*;
 import work.dto.user.userdetails.GetUserDetailsDTO;
 import work.dto.user.userdetails.UpdateUserDetailsDTO;
-import work.service.authentication.AuthenticationService;
 import work.service.user.UserService;
 import work.util.mapstruct.UserMapper;
 //import io.swagger.annotations.Api;
@@ -18,22 +17,19 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
-//@Api(value = "User", tags = "User")
 @Tag(name = "User", description = "User API")
 @CrossOrigin
 public class UserControllerBean implements UserController {
     private final UserMapper userMapper;
     private final UserService userService;
-
-    private final AuthenticationService authenticationService;
 
     @Override
     public ResponseObject userRegisterAccount(@Valid RequestUserDTO requestUserDto) {
@@ -43,45 +39,26 @@ public class UserControllerBean implements UserController {
 
     @Override
     public ResponseObject login(RequestLoginDTO userLoginDto) {
-        return userService.signin(userMapper.fromRequestUserDto(userLoginDto));
-    }
-
-    public ResponseObject resetPassword(String email) {
-        log.info("UserController ==> resetPassword() - start: email = {}", email);
-        var response = userService.sendEmailToPasswordReset(email);
-        log.info("UserController ==> resetPassword() - end: response = {}", response);
-        return response;
-    }
-
-    @Override
-    public ResponseObject checkCodeForPasswordResetting(String code) {
-        return userService.checkCodeForPasswordResetting(code);
-    }
-
-    @Override
-    public ResponseObject confirmPasswordResetting(PasswordResetDTO passwordResetDTO) {
-        return userService.passwordResetting(passwordResetDTO.getCode(), passwordResetDTO.getPassword());
-    }
-
-    @Override
-    public ResponseObject resetPassword(HttpServletRequest request, ChangePasswordDTO password) {
-        var tutor = authenticationService.getUserByToken(request);
-        return userService.resetPassword(tutor, password.getPassword());
+//        return userService.signin(userMapper.fromRequestUserDto(userLoginDto));
+        return null;
     }
 
     @Override
     public GetUserDetailsDTO getUserDetails(HttpServletRequest request) {
-        return userService.getUserDetails(authenticationService.getUserByToken(request).getId());
+//        return userService.getUserDetails(authenticationService.getUserByToken(request).getId());
+        return null;
     }
 
     @Override
     public ResponseObject updateUserDetails(HttpServletRequest request, UpdateUserDetailsDTO detailsDTO) {
-        return userService.updateUserDetails(detailsDTO, authenticationService.getUserByToken(request).getId());
+//        return userService.updateUserDetails(detailsDTO, authenticationService.getUserByToken(request).getId());
+        return null;
     }
 
     @Override
     public ResponseObject updateUserImage(HttpServletRequest request, MultipartFile photo) {
-        return userService.updateUserImage(authenticationService.getUserByToken(request).getId(), photo);
+//        return userService.updateUserImage(authenticationService.getUserByToken(request).getId(), photo);
+    return null;
     }
 
     @Override

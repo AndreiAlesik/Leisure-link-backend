@@ -9,7 +9,6 @@ import work.repository.MemberRepository;
 import work.repository.MessageRepository;
 import work.repository.UserDetailsRepository;
 import work.repository.UserRepository;
-import work.service.authentication.AuthenticationService;
 import work.util.exception.AuthenticationException;
 import work.util.exception.CustomException;
 import work.util.exception.UserNotFoundException;
@@ -26,16 +25,15 @@ public class ChatServiceBean implements ChatService {
     private final UserDetailsRepository userDetailsRepository;
     private final MemberRepository memberRepository;
     private final MessageMapper messageMapper;
-    private final AuthenticationService authenticationService;
+//    private final AuthenticationService authenticationService;
 
     private final UserRepository userRepository;
 
-    public ChatServiceBean(MessageRepository messageRepository, UserDetailsRepository userDetailsRepository, MemberRepository memberRepository, MessageMapper messageMapper, AuthenticationService authenticationService, UserRepository userRepository) {
+    public ChatServiceBean(MessageRepository messageRepository, UserDetailsRepository userDetailsRepository, MemberRepository memberRepository, MessageMapper messageMapper, UserRepository userRepository) {
         this.messageRepository = messageRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.memberRepository = memberRepository;
         this.messageMapper = messageMapper;
-        this.authenticationService = authenticationService;
         this.userRepository = userRepository;
     }
 

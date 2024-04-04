@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import work.dto.ResponseObject;
 import work.dto.event.create.CreateCommentDto;
@@ -19,8 +18,8 @@ import work.dto.event.get.certainevent.MembersForUserDto;
 import work.dto.event.get.search.EventDto;
 import work.dto.event.get.search.NumberOfPages;
 
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -145,7 +144,7 @@ public interface EventController {
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @GetMapping("/history")
-    @PreAuthorize("hasRole('ROLE_USER')")
+//    @PreAuthorize("hasRole('ROLE_USER')")
     List<EventDto> getAllUserEvents(HttpServletRequest request);
 
     @Operation(summary = "Get all categories")

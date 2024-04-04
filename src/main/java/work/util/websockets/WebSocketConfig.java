@@ -6,16 +6,12 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import work.service.authentication.AuthenticationService;
 
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final AuthenticationService authenticationService;
-
-    public WebSocketConfig(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public WebSocketConfig() {
     }
 
     @Override
@@ -29,12 +25,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/chat")
                 .setAllowedOrigins("*")
                 .setAllowedOriginPatterns("*")
-                .setHandshakeHandler(new CustomHandshakeHandler(authenticationService))
+                .setHandshakeHandler(new CustomHandshakeHandler())
         ;
         registry.addEndpoint("/chat")
                 .setAllowedOrigins("*")
                 .setAllowedOriginPatterns("*")
-                .setHandshakeHandler(new CustomHandshakeHandler(authenticationService))
+                .setHandshakeHandler(new CustomHandshakeHandler())
                 .withSockJS();
     }
 }

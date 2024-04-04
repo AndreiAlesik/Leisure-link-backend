@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import work.domain.AppUserRole;
 import work.domain.User;
 import work.domain.UserDetails;
 import work.dto.ResponseObject;
@@ -15,8 +14,6 @@ import work.repository.UserRepository;
 import work.repository.UserDetailsRepository;
 import work.service.email.EmailService;
 import work.service.user.UserServiceBean;
-import work.util.exception.UserNotFoundException;
-import work.util.security.JwtTokenProvider;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

@@ -24,7 +24,6 @@ import work.dto.event.get.certainevent.MembersForUserDto;
 import work.dto.event.get.search.EventDto;
 import work.dto.event.get.search.NumberOfPages;
 import work.repository.*;
-import work.service.authentication.AuthenticationService;
 import work.service.geodata.GeodataService;
 import work.service.util.UtilService;
 import work.util.exception.CustomException;
@@ -32,8 +31,8 @@ import work.util.mapstruct.CommentMapper;
 import work.util.mapstruct.EventMapper;
 import work.util.mapstruct.MemberMapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -45,7 +44,6 @@ import java.util.stream.Collectors;
 public class EventServiceBean implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
-    private final AuthenticationService authenticationService;
     private final MemberRepository memberRepository;
     private final GeodataService geodataService;
     private final CommentMapper commentMapper;
@@ -56,10 +54,9 @@ public class EventServiceBean implements EventService {
     private final CategoryRepository categoryRepository;
     private final UserDetailsRepository userDetailsRepository;
 
-    public EventServiceBean(EventRepository eventRepository, EventMapper eventMapper, AuthenticationService authenticationService, MemberRepository memberRepository, GeodataService geodataService, CommentMapper commentMapper, CommentRepository commentRepository, MemberMapper memberMapper, EventImageRepository eventImageRepository, UtilService utilService, CategoryRepository categoryRepository, UserDetailsRepository userDetailsRepository) {
+    public EventServiceBean(EventRepository eventRepository, EventMapper eventMapper, MemberRepository memberRepository, GeodataService geodataService, CommentMapper commentMapper, CommentRepository commentRepository, MemberMapper memberMapper, EventImageRepository eventImageRepository, UtilService utilService, CategoryRepository categoryRepository, UserDetailsRepository userDetailsRepository) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
-        this.authenticationService = authenticationService;
         this.memberRepository = memberRepository;
         this.geodataService = geodataService;
         this.commentMapper = commentMapper;
@@ -73,7 +70,7 @@ public class EventServiceBean implements EventService {
 
     @Transactional
     public ResponseObject createEvent(HttpServletRequest request, EventCreateDto eventToCreate) {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var event = eventMapper.fromCreateDto(eventToCreate);
 
         if (eventToCreate.photos() != null) {
@@ -146,14 +143,14 @@ public class EventServiceBean implements EventService {
     @Transactional
     public ResponseObject createEventComment(HttpServletRequest request, CreateCommentDto createCommentDto, UUID eventId) {
 //        try {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var event = eventRepository.findById(eventId).orElseThrow(() -> new CustomException("UNAUTHORIZED", HttpStatus.UNAUTHORIZED));
         var comment = commentMapper.fromCreateCommentDto(createCommentDto);
         comment.setEvent(event);
         comment.setUser(user);
         comment.setCommentDate(ZonedDateTime.now());
         comment = commentRepository.saveAndFlush(comment);
-        return new ResponseObject(HttpStatus.CREATED, "COMMENT_CREATED", authenticationService.extractRequestToken(request));
+        return new ResponseObject(HttpStatus.CREATED, "COMMENT_CREATED", null);
 //        } catch (Exception e) {
 //            var event = eventRepository.findById(eventId).orElseThrow(() -> new CustomException("EVENT_NOT_FOUND", HttpStatus.NOT_FOUND));
 //            var comment = commentMapper.fromCreateCommentDto(createCommentDto);
@@ -265,7 +262,7 @@ public class EventServiceBean implements EventService {
     @Override
     @Transactional
     public ResponseObject addCurrentUserToEvent(HttpServletRequest request, UUID eventId) {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var event = eventRepository.findById(eventId).orElseThrow(() -> new CustomException("EVENT_NOT_FOUND", HttpStatus.BAD_REQUEST));
         var dbMember = memberRepository.isMemberExistInEvent(user.getId(), eventId);
         if (dbMember.isPresent()) {
@@ -285,7 +282,7 @@ public class EventServiceBean implements EventService {
     @Override
     @Transactional
     public String isUserRegisteredToEvent(HttpServletRequest request, UUID eventId) {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var member = memberRepository.isMemberExistInEvent(user.getId(), eventId);
         if (member.isPresent()) {
             if (member.get().getStatus().equals(AppMemberStatus.STATUS_INACTIVE)) {
@@ -297,14 +294,14 @@ public class EventServiceBean implements EventService {
     @Override
     @Transactional
     public ResponseObject removeCurrentUserFromEvent(HttpServletRequest request, UUID eventId) {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var event = eventRepository.findEventByIdAndUserId(user.getId(), eventId).orElseThrow(() -> new CustomException("EVENT_NOT_FOUND", HttpStatus.NOT_FOUND));
         event.getMembers().stream()
                 .filter(member -> member.getUser().equals(user))
                 .findFirst().orElseThrow(() -> new CustomException("UNAUTHORIZED", HttpStatus.UNAUTHORIZED))
                 .setStatus(AppMemberStatus.STATUS_INACTIVE);
         eventRepository.saveAndFlush(event);
-        return new ResponseObject(HttpStatus.OK, "SUCCESSFULLY", authenticationService.extractRequestToken(request));
+        return new ResponseObject(HttpStatus.OK, "SUCCESSFULLY", null);
     }
 
     @Override
@@ -438,7 +435,7 @@ public class EventServiceBean implements EventService {
     @Override
     @Transactional
     public List<EventDto> getAllUserEvents(HttpServletRequest request) {
-        var user = authenticationService.getUserByToken(request);
+        var user = new User();
         var events = eventRepository.findAllUserEvents(user.getId());
         var response = events.stream().map(eventMapper::eventToEventDto).toList();
         response.forEach(r -> {
