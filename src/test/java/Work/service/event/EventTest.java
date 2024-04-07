@@ -35,8 +35,6 @@ public class EventTest {
     @Mock
     private EventImageRepository eventImageRepository;
 
-    @Mock
-    private AuthenticationService authenticationService;
 
     @Mock
     private EventMapper eventMapper;
@@ -94,7 +92,6 @@ public class EventTest {
                 .email("user@example.com")
                 .password("password")
                 .isActivated(true)
-                .appUserRoles(AppUserRole.ROLE_USER)
                 .code("UserCode")
                 .codeTimeGenerated(ZonedDateTime.now())
                 .userDetails(userDetails)
@@ -109,7 +106,6 @@ public class EventTest {
                 .messages(new HashSet<>())
                 .build();
 
-        when(authenticationService.getUserByToken(request)).thenReturn(user);
         when(eventMapper.fromCreateDto(eventCreateDto)).thenReturn(event);
         when(eventRepository.saveAndFlush(any(Event.class))).thenReturn(event);
         when(memberRepository.saveAndFlush(any(Member.class))).thenReturn(member);

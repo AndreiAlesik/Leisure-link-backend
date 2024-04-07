@@ -12,11 +12,11 @@ import work.service.util.InitializerBean;
 @EnableConfigurationProperties
 @EnableCaching
 public class LeisureLinkBackend {
-    private final InitializerBean initializerBean;
+//    private final InitializerBean initializerBean;
 
-    public LeisureLinkBackend(InitializerBean initializerBean) {
-        this.initializerBean = initializerBean;
-    }
+//    public LeisureLinkBackend(InitializerBean initializerBean) {
+//        this.initializerBean = initializerBean;
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(LeisureLinkBackend.class, args);

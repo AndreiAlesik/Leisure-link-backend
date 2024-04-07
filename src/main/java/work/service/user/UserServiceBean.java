@@ -1,9 +1,16 @@
 package work.service.user;
 
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import work.domain.User;
 import work.dto.ResponseObject;
 import work.dto.user.GetUserIdDTO;
+import work.dto.user.RegisterUser;
 import work.dto.user.userdetails.GetUserDetailsDTO;
 import work.dto.user.userdetails.UpdateUserDetailsDTO;
 import work.repository.UserDetailsRepository;
@@ -16,19 +23,23 @@ import work.util.exception.UserNotFoundException;
 import work.util.mapstruct.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.CredentialRepresentation;
 
+
+import java.security.Principal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 
-@AllArgsConstructor
+
 @Slf4j
 @Service
 public class UserServiceBean implements UserService {
@@ -37,6 +48,27 @@ public class UserServiceBean implements UserService {
     private final UserMapper userMapper;
     private final EmailService emailService;
     private final UtilService utilService;
+
+
+    @Value("${keycloak.auth-server-url}")
+    private String serverUrl;
+
+    @Value("${keycloak.realm}")
+    private String realm;
+
+    @Value("${keycloak-admin-client.client-id}")
+    private String clientId;
+
+    @Value("${keycloak-admin-client.client-secret}")
+    private String clientSecret;
+
+    public UserServiceBean(UserRepository userRepository, UserDetailsRepository userDetailsRepository, UserMapper userMapper, EmailService emailService, UtilService utilService) {
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
+        this.userMapper = userMapper;
+        this.emailService = emailService;
+        this.utilService = utilService;
+    }
 
 
     @Override
@@ -128,8 +160,35 @@ public class UserServiceBean implements UserService {
     }
 
     @Override
-    public GetUserIdDTO getMyId(HttpServletRequest request) {
+    public GetUserIdDTO getMyId(HttpServletRequest request, Principal principal) {
 //        return new GetUserIdDTO(authenticationService.getUserByToken(request).getId());
+        principal.getName();
+        ((JwtAuthenticationToken) principal).getTokenAttributes();
+        RegisterUser registerUserDto=new RegisterUser("test@gmail.com", "test@gmail.com","test");
+        Keycloak keycloak = KeycloakBuilder.builder()
+                .serverUrl(serverUrl)
+                .realm(realm)
+                .clientId(clientId)
+                .clientSecret(clientSecret)
+                .grantType("client_credentials")
+                .build();
+
+        UserRepresentation user = new UserRepresentation();
+        user.setUsername(registerUserDto.username());
+        user.setEmail(registerUserDto.email());
+        user.setEnabled(true);
+
+        CredentialRepresentation credential = new CredentialRepresentation();
+        credential.setType(CredentialRepresentation.PASSWORD);
+        credential.setValue(registerUserDto.password());
+        credential.setTemporary(false);
+
+        user.setCredentials(Collections.singletonList(credential));
+
+        Response response = keycloak.realm(realm).users().create(user);
+        if (response.getStatus() != 201) {
+            throw new RuntimeException("Failed to create user");
+        }
         return null;
     }
 

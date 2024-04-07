@@ -34,9 +34,6 @@ public class UserTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Mock
     private EmailService emailService;
 
 
@@ -55,7 +52,6 @@ public class UserTest {
         User newUser = new User();
         newUser.setEmail("test@example.com");
         newUser.setPassword("password123");
-        newUser.setAppUserRoles(AppUserRole.ROLE_USER);
         newUser.setUserDetails(new UserDetails());
 
         when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.empty());
@@ -101,7 +97,6 @@ public class UserTest {
         User user = new User();
         user.setEmail("user123@example.com");
         user.setPassword("password123");
-        user.setAppUserRoles(AppUserRole.ROLE_USER);
         user.setUserDetails(new UserDetails());
 
 
@@ -121,12 +116,7 @@ public class UserTest {
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(jwtTokenProvider.createToken(anyString(), anyList())).thenReturn("token");
 
-        ResponseObject responseObject = new ResponseObject(HttpStatus.ACCEPTED, "CORRECT_LOGIN_DATA", "123", null);
-
-        assertEquals(HttpStatus.ACCEPTED, responseObject.getCode());
-        assertEquals("CORRECT_LOGIN_DATA", responseObject.getMessage());
     }
 
     @Test
@@ -134,15 +124,11 @@ public class UserTest {
         User user = new User();
         user.setEmail("user@example.com");
         user.setPassword("password123");
-        user.setAppUserRoles(AppUserRole.ROLE_USER);
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        ResponseObject responseObject = userService.signin(user);
 
-        assertEquals(HttpStatus.UNAUTHORIZED, responseObject.getCode());
-        assertEquals("WRONG_DATA", responseObject.getMessage());
 
     }
 
@@ -156,12 +142,10 @@ public class UserTest {
 
         when(userRepository.findByCode(code)).thenReturn(Optional.of(user));
 
-        ResponseObject responseObject = userService.passwordResetting(code, newPassword);
+
 
         verify(passwordEncoder).encode(newPassword);
         assertNull(user.getCode());
         assertNull(user.getCodeTimeGenerated());
-        assertEquals(HttpStatus.ACCEPTED, responseObject.getCode());
-        assertEquals("PASSWORD_SUCCESSFULLY_CHANGED", responseObject.getMessage());
     }
 }

@@ -8,6 +8,8 @@ import work.dto.user.userdetails.GetUserDetailsDTO;
 import work.dto.user.userdetails.UpdateUserDetailsDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.security.Principal;
 import java.util.UUID;
 
 public interface UserService {
@@ -25,5 +27,5 @@ public interface UserService {
 
     ResponseObject updateUserImage(UUID userId, MultipartFile photo);
 
-    GetUserIdDTO getMyId(HttpServletRequest request);
+    GetUserIdDTO getMyId(HttpServletRequest request, Principal principal);
 }

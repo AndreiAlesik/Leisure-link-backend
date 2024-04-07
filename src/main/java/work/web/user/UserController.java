@@ -16,6 +16,8 @@ import work.dto.user.userdetails.UpdateUserDetailsDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.security.Principal;
+
 
 public interface UserController {
 
@@ -47,7 +49,7 @@ public interface UserController {
             @ApiResponse(responseCode = "400", description = "USER_NOT_FOUND"),
     })
     @SecurityRequirement(name = "Bearer Authentication")
-    GetUserDetailsDTO getUserDetails(HttpServletRequest request);
+    GetUserDetailsDTO getUserDetails(HttpServletRequest request, Principal principal);
 
     @PutMapping("/user-details")
     @ApiResponses(value = {
@@ -70,6 +72,6 @@ public interface UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA_SUCCESSFULLY_UPDATED"),
     })
-    @SecurityRequirement(name = "Bearer Authentication")
-    GetUserIdDTO getMyId(HttpServletRequest request);
+//    @SecurityRequirement(name = "Bearer Authentication")
+    GetUserIdDTO getMyId(HttpServletRequest request, Principal principal);
 }

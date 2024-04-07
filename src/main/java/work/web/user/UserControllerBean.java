@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import java.security.Principal;
+
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +46,7 @@ public class UserControllerBean implements UserController {
     }
 
     @Override
-    public GetUserDetailsDTO getUserDetails(HttpServletRequest request) {
+    public GetUserDetailsDTO getUserDetails(HttpServletRequest request, Principal principal) {
 //        return userService.getUserDetails(authenticationService.getUserByToken(request).getId());
         return null;
     }
@@ -62,7 +64,7 @@ public class UserControllerBean implements UserController {
     }
 
     @Override
-    public GetUserIdDTO getMyId(HttpServletRequest request) {
-        return userService.getMyId(request);
+    public GetUserIdDTO getMyId(HttpServletRequest request, Principal principal) {
+        return userService.getMyId(request, principal);
     }
 }
