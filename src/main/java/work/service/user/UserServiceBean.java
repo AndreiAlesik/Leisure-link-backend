@@ -50,16 +50,16 @@ public class UserServiceBean implements UserService {
     private final UtilService utilService;
 
 
-    @Value("${keycloak.auth-server-url}")
+    @Value("${authentication-oidc.auth-server-url}")
     private String serverUrl;
 
-    @Value("${keycloak.realm}")
+    @Value("${authentication-oidc.realm}")
     private String realm;
 
-    @Value("${keycloak-admin-client.client-id}")
+    @Value("${authentication-oidc.client-id}")
     private String clientId;
 
-    @Value("${keycloak-admin-client.client-secret}")
+    @Value("${authentication-oidc.client-secret}")
     private String clientSecret;
 
     public UserServiceBean(UserRepository userRepository, UserDetailsRepository userDetailsRepository, UserMapper userMapper, EmailService emailService, UtilService utilService) {

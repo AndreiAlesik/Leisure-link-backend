@@ -1,32 +1,25 @@
 version: "3.3"
 services:
-  #  app:
-  #    image: openjdk:17
-  #    container_name: leisure-link-backend
-  #    ports:
-  #      - "8085:8085" # Port aplikacji
-  #      - "5005:5005" # Port dla debugowania
-  #    volumes:
-  #      - ./target/leisure-link.jar:/target/leisure-link.jar
-  #    depends_on:
-  #      - postgres
-  #    environment:
-  #      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-  #    command: java -jar /target/leisure-link.jar
-  #    # Service health check
-  #    healthcheck:
-  #      test: curl -f http://localhost:8085/profile || exit 1
-  #      interval: 1m
-  #      timeout: 10s
-  #      retries: 2
-
-
-  #  adminer:
-  #    image: adminer
-  #      # networks:
-  #    # - leisure-link
-  #    labels:
-  #      - traefik.http.routers.adminer.rule=Host(`adminer.localhost`)
+  app:
+    image: openjdk:21
+    container_name: leisure-link-backend
+    ports:
+      - "8085:8085" # Port aplikacji
+      - "5005:5005" # Port dla debugowania
+    volumes:
+      - ./target/leisure-link.jar:/target/leisure-link.jar
+    depends_on:
+      - postgres
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    command: java -jar /target/leisure-link.jar
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8085/profile || exit 1" ]
+      interval: 1m
+      timeout: 10s
+      retries: 2
+    networks:
+      - leisure-link
 
   postgres:
     image: postgis/postgis:15-3.4
@@ -37,46 +30,45 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: leisurelink
-      # networks:
-      # - leisure-link
-
-  #  proxy:
-  #    image: traefik:v2.10
-  #    ports:
-  #      - 127.0.0.1:80:80
-  #    volumes:
-  #      - /var/run/docker.sock:/var/run/docker.sock:ro
-  #    command:
-  #      - --providers.docker
-  #      # networks:
-  #      # - leisure-link
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: always
+    networks:
+      - leisure-link
 
   redis:
     image: redis:latest
     container_name: redis
     ports:
       - "6379:6379"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - leisure-link
 
-    #  flyway:
-    #    image: flyway/flyway:latest
-    #    command: -url=jdbc:postgresql://postgres:5432/leisurelink -schemas=public -user=postgres -password=postgres -baselineOnMigrate=true migrate
-    #    volumes:
-    #      - ./src/main/resources/db/migration:/flyway/sql
-    #    restart: on-failure
-    #    depends_on:
-    #      - postgres
-
-    # networks:
-    # leisure-link:
-    # external: true
+#  flyway:
+#    image: flyway/flyway:latest
+#    command: -url=jdbc:postgresql://postgres:5432/leisurelink -schemas=public -user=postgres -password=postgres -baselineOnMigrate=true migrate
+#    volumes:
+#      - ./src/main/resources/db/migration:/flyway/sql
+#    restart: on-failure
+#    depends_on:
+#      - postgres
+#    networks:
+#      - leisure-link
 
   keycloak:
     container_name: keycloak-auth
-    image: quay.io/keycloak/keycloak:22.0.1
-    #build:
-    # context: .
-    #args:
-    # KEYCLOAK_VERSION: 22.0.1
+    image: quay.io/keycloak/keycloak:24.0.0
     command:
       - "start-dev"
     ports:
@@ -94,9 +86,9 @@ services:
       KC_HEALTH_ENABLED: true
     depends_on:
       - keycloak-db
-    #volumes:
-    #  - /home/keycloak/automobile-realm.json:/opt/keycloak/data/import/automobile-realm.json
-    # Database Service (Postgres) for Keycloak
+#    volumes:
+#      - /home/keycloak/leisurelink-realm.json:/opt/keycloak/data/import/leisurelink-realm.json
+
   keycloak-db:
     image: postgres:14-alpine
     container_name: keycloak-db
@@ -106,9 +98,10 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
-    networks: [ keycloak ]
+    networks:
+      - keycloak
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U" ]
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "keycloak" ]
       timeout: 45s
       interval: 10s
       retries: 10
@@ -116,9 +109,10 @@ services:
 
 
 networks:
-#  leisure-link:
-#    name: app
-#    driver: bridge
-  keycloak:
-    name: keycloak
+  leisure-link:
     driver: bridge
+  keycloak:
+    driver: bridge
+
+volumes:
+  postgres_data:
