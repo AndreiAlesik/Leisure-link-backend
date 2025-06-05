@@ -20,7 +20,7 @@ jobs:
       - name: Copy .jar
         run: mkdir build && cp target/*.jar build
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v2
         with:
           name: leisure-link.jar
           path: build
