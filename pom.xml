@@ -14,6 +14,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>24</java.version>
         <start-class>work.LeisureLinkBackend</start-class>
+<!--        <native.maven.plugin.version>0.10.0</native.maven.plugin.version>-->
     </properties>
 
     <parent>
@@ -243,6 +244,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+<!--                <configuration>-->
+<!--                    <image>-->
+<!--                        <builder>paketobuildpacks/builder:tiny</builder>-->
+<!--                        <env>-->
+<!--                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>-->
+<!--                        </env>-->
+<!--                    </image>-->
+<!--                </configuration>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -265,6 +274,28 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.graalvm.buildtools</groupId>-->
+<!--                <artifactId>native-maven-plugin</artifactId>-->
+<!--                <version>${native.maven.plugin.version}</version>-->
+<!--                <extensions>true</extensions>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>build-native</id>-->
+<!--                        <goals>-->
+<!--                            <goal>compile-no-fork</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>package</phase>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>test-native</id>-->
+<!--                        <goals>-->
+<!--                            <goal>test</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>test</phase>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <!--            <plugin>-->
             <!--                <groupId>org.flywaydb</groupId>-->
             <!--                <artifactId>flyway-maven-plugin</artifactId>-->
@@ -272,5 +303,46 @@
             <!--            </plugin>-->
         </plugins>
     </build>
+
+<!--    <profiles>-->
+<!--        <profile>-->
+<!--            <id>native</id>-->
+<!--            <properties>-->
+<!--                <repackage.classifier>exec</repackage.classifier>-->
+<!--                <native-buildtools.version>0.10.0</native-buildtools.version>-->
+<!--            </properties>-->
+<!--            <dependencies>-->
+<!--                <dependency>-->
+<!--                    <groupId>org.graalvm.buildtools</groupId>-->
+<!--                    <artifactId>native-maven-plugin</artifactId>-->
+<!--                    <version>${native.maven.plugin.version}</version>-->
+<!--                </dependency>-->
+<!--            </dependencies>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.graalvm.buildtools</groupId>-->
+<!--                        <artifactId>native-maven-plugin</artifactId>-->
+<!--                        <configuration>-->
+<!--                            <classesDirectory>${project.build.outputDirectory}</classesDirectory>-->
+<!--                            <metadataRepository>-->
+<!--                                <enabled>true</enabled>-->
+<!--                            </metadataRepository>-->
+<!--                            <requiredVersion>22.3</requiredVersion>-->
+<!--                        </configuration>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>native-build</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>compile-no-fork</goal>-->
+<!--                                </goals>-->
+<!--                                <phase>package</phase>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
+<!--    </profiles>-->
 
 </project>
