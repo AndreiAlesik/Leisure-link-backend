@@ -1,0 +1,16 @@
+FROM ghcr.io/graalvm/graalvm-ce:latest AS builder
+
+WORKDIR /app
+COPY . /app
+
+RUN ./mvnw -Pnative clean package
+
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+COPY --from=builder /app/target/leisure-link /app/leisure-link
+
+EXPOSE 8085
+
+ENTRYPOINT ["/app/leisure-link"]

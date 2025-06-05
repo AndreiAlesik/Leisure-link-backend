@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.native
+    container_name: leisure-link-native
+    ports:
+      - "8085:8085"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/leisurelink
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+  adminer:
+    image: adminer
+    labels:
+      - traefik.http.routers.adminer.rule=Host(`adminer.localhost`)
+
+  postgres:
+    image: postgis/postgis:15-3.4
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: leisurelink
+
+  proxy:
+    image: traefik:v2.10
+    ports:
+      - 127.0.0.1:80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --providers.docker
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"

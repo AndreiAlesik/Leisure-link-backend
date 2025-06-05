@@ -1,0 +1,21 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "application.*\\.properties"
+      },
+      {
+        "pattern": "application.*\\.yml"
+      },
+      {
+        "pattern": "META-INF/spring.factories"
+      },
+      {
+        "pattern": "META-INF/spring/.*"
+      },
+      {
+        "pattern": "db/migration/.*"
+      }
+    ]
+  }
+}
