@@ -2,6 +2,7 @@ package work.web.user;
 
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 import work.dto.ResponseObject;
 import work.dto.user.*;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import work.dto.user.userdetails.GetUserDetailsDTO;
 import work.dto.user.userdetails.UpdateUserDetailsDTO;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 public interface UserController {

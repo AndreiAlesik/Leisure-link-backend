@@ -3,7 +3,7 @@ package work.domain;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -40,4 +40,3 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserDetails userDetails;
 }
-

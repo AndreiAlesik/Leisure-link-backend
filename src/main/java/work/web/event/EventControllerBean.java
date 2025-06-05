@@ -1,5 +1,6 @@
 package work.web.event;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,6 @@ import work.dto.event.get.search.EventDto;
 import work.dto.event.get.search.NumberOfPages;
 import work.service.event.EventService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 

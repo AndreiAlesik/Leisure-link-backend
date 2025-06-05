@@ -7,7 +7,7 @@ import work.repository.UserRepository;
 import work.util.exception.AuthenticationException;
 import work.util.security.JwtTokenProvider;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AuthenticationServiceBean implements AuthenticationService {

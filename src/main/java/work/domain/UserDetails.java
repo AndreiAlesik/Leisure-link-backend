@@ -3,7 +3,7 @@ package work.domain;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -35,9 +35,5 @@ public class UserDetails {
     private byte[] photo;
 
     @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(nullable = false)
     private User user;
 }
-
-
-

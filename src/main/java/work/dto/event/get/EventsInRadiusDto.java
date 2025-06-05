@@ -4,15 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import work.domain.EventImage;
-import work.dto.event.get.certainevent.EventImageDto;
 import work.dto.event.get.certainevent.Host;
-import work.dto.event.get.search.EventImagesDto;
 
-import javax.persistence.SequenceGenerators;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor

@@ -32,8 +32,8 @@ import work.util.mapstruct.CommentMapper;
 import work.util.mapstruct.EventMapper;
 import work.util.mapstruct.MemberMapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.*;

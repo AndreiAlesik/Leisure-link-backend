@@ -21,12 +21,12 @@ public class MethodLoggerAspect {
 
     private final Logger logger = LoggerFactory.getLogger(MethodLoggerAspect.class);
 
-    @Value("${rest.methods.logger.enabled:true}")
+    @Value("${rest.methods.logger.enabled:false}")
     private boolean restMethodsLoggerEnabled;
 
-    @Value("${service.methods.logger.enabled:true}")
+    @Value("${service.methods.logger.enabled:false}")
     private boolean serviceMethodsLoggerEnabled;
-    @Value("${repository.methods.logger.enabled}")
+    @Value("${repository.methods.logger.enabled:false}")
     private boolean repositoryMethodsLoggerEnabled;
 
     @Around("@within(restController)")

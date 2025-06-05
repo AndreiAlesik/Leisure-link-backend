@@ -3,7 +3,7 @@ package work.service.authentication;
 import org.springframework.http.server.ServerHttpRequest;
 import work.domain.User;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.stream.Collectors;
