@@ -1,16 +1,7 @@
 package work.dto.event.get.certainevent;
 
-import work.domain.AppMemberType;
-
 import java.util.UUID;
 
-public record MembersForUserDto(
-        UUID id,
+import work.domain.AppMemberType;
 
-        String name,
-
-        String lastName,
-
-        AppMemberType type
-) {
-}
+public record MembersForUserDto(UUID id, String name, String lastName, AppMemberType type) {}

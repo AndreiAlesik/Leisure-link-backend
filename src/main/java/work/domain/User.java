@@ -1,16 +1,17 @@
 package work.domain;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import jakarta.persistence.*;
+import lombok.*;
+
 @Entity
-@Table(name = "users", indexes = {
-        @Index(name = "index_email", columnList = "email", unique = true)
-})
+@Table(
+    name = "users",
+    indexes = {@Index(name = "index_email", columnList = "email", unique = true)})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -18,25 +19,25 @@ import java.util.UUID;
 @Setter
 public class User {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-    @Column(name = "email", unique = true)
-    private String email;
+  @Column(name = "email", unique = true)
+  private String email;
 
-    private String password;
+  private String password;
 
-    private Boolean isActivated = Boolean.FALSE;
+  private Boolean isActivated = Boolean.FALSE;
 
-    private AppUserRole appUserRoles;
+  private AppUserRole appUserRoles;
 
-    private String code;
+  private String code;
 
-    private ZonedDateTime codeTimeGenerated;
+  private ZonedDateTime codeTimeGenerated;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserDetails userDetails;
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private UserDetails userDetails;
 }

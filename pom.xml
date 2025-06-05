@@ -15,6 +15,7 @@
         <java.version>24</java.version>
         <start-class>work.LeisureLinkBackend</start-class>
 <!--        <native.maven.plugin.version>0.10.0</native.maven.plugin.version>-->
+        <spotless.version>2.41.1</spotless.version>
     </properties>
 
     <parent>
@@ -301,6 +302,69 @@
             <!--                <artifactId>flyway-maven-plugin</artifactId>-->
             <!--                <version>8.4.1</version>-->
             <!--            </plugin>-->
+
+            <!-- Spotless -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <configuration>
+                    <!-- Java format configuration -->
+                    <java>
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
+                        <!-- Google Java Format -->
+                        <googleJavaFormat>
+                            <version>1.17.0</version>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <!-- Remove unused imports -->
+                        <removeUnusedImports />
+                        <!-- Import order -->
+                        <importOrder>
+                            <order>java,javax,org,com,work</order>
+                        </importOrder>
+                    </java>
+
+                    <!-- XML format configuration -->
+                    <xml>
+                        <includes>
+                            <include>src/main/resources/**/*.xml</include>
+                            <include>pom.xml</include>
+                        </includes>
+                        <eclipseWtp>
+                            <type>XML</type>
+                        </eclipseWtp>
+                    </xml>
+
+                    <!-- Properties files -->
+                    <format>
+                        <includes>
+                            <include>src/main/resources/**/*.properties</include>
+                        </includes>
+                        <trimTrailingWhitespace />
+                        <endWithNewline />
+                    </format>
+
+                    <!-- Markdown files -->
+                    <markdown>
+                        <includes>
+                            <include>**/*.md</include>
+                        </includes>
+                        <flexmark />
+                    </markdown>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

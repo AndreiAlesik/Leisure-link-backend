@@ -1,16 +1,13 @@
 package work.domain;
 
 public enum AppMemberType {
+  ROLE_HOST,
 
-    ROLE_HOST,
+  ROLE_GUEST,
 
-    ROLE_GUEST,
+  ROLE_ADMIN;
 
-    ROLE_ADMIN;
-
-    public String getType() {
-        return name();
-    }
-
+  public String getType() {
+    return name();
+  }
 }
-

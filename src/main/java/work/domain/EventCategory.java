@@ -1,12 +1,13 @@
 package work.domain;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "event_categories")
@@ -17,18 +18,18 @@ import java.util.UUID;
 @Setter
 public class EventCategory {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-    private String name;
+  private String name;
 
-    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    Set<Event> events = new HashSet<>();
+  @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+  Set<Event> events = new HashSet<>();
 
-    public EventCategory(String name) {
-        this.name = name;
-    }
+  public EventCategory(String name) {
+    this.name = name;
+  }
 }

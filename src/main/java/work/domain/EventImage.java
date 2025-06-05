@@ -1,10 +1,11 @@
 package work.domain;
 
-import lombok.*;
+import java.util.UUID;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
-import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "event_images")
@@ -15,16 +16,15 @@ import java.util.UUID;
 @Setter
 public class EventImage {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Event event;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(nullable = false)
+  private Event event;
 
-    @Lob
-    private byte[] image;
+  @Lob private byte[] image;
 }

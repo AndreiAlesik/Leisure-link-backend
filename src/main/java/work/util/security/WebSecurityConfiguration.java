@@ -21,17 +21,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfiguration {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MyUserDetails myUserDetails;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final MyUserDetails myUserDetails;
 
-    public WebSecurityConfiguration(@Lazy JwtTokenProvider jwtTokenProvider, MyUserDetails myUserDetails) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.myUserDetails = myUserDetails;
-    }
+  public WebSecurityConfiguration(
+      @Lazy JwtTokenProvider jwtTokenProvider, MyUserDetails myUserDetails) {
+    this.jwtTokenProvider = jwtTokenProvider;
+    this.myUserDetails = myUserDetails;
+  }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) ->
+        web.ignoring()
+            .requestMatchers(
                 "/v3/api-docs/**",
                 "/configuration/ui",
                 "/swagger-resources/**",
@@ -49,53 +52,55 @@ public class WebSecurityConfiguration {
                 "/chat**",
                 "/geodata/**",
                 "/events/all-categories",
-                "/events/number/**"
-        );
-    }
+                "/events/number/**");
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui.html").permitAll()
-                        .requestMatchers("/chat/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .with(new JwtTokenFilterConfigurer(jwtTokenProvider), customizer -> {});
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.cors(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/swagger-ui.html")
+                    .permitAll()
+                    .requestMatchers("/chat/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .with(new JwtTokenFilterConfigurer(jwtTokenProvider), customizer -> {});
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Value("${security.jwt.token.secret-key:secret-key}")
-    private String secretKey;
+  @Value("${security.jwt.token.secret-key:secret-key}")
+  private String secretKey;
 
-    @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h
+  @Value("${security.jwt.token.expire-length:3600000}")
+  private long validityInMilliseconds = 3600000; // 1h
 
-    @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider(secretKey, validityInMilliseconds, myUserDetails);
-    }
+  @Bean
+  public JwtTokenProvider jwtTokenProvider() {
+    return new JwtTokenProvider(secretKey, validityInMilliseconds, myUserDetails);
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(12);
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
+      throws Exception {
+    return authConfig.getAuthenticationManager();
+  }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(myUserDetails);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
+  @Bean
+  public AuthenticationProvider authenticationProvider() {
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    provider.setUserDetailsService(myUserDetails);
+    provider.setPasswordEncoder(passwordEncoder());
+    return provider;
+  }
 }

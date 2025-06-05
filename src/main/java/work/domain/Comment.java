@@ -1,11 +1,12 @@
 package work.domain;
 
-import lombok.*;
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
-import java.time.ZonedDateTime;
-import java.util.UUID;
+import lombok.*;
 
 @Entity
 @Table(name = "comments")
@@ -16,22 +17,22 @@ import java.util.UUID;
 @Setter
 public class Comment {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(generator = "UUID")
+  @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "event_id")
+  private Event event;
 
-    private String content;
+  private String content;
 
-    private Integer grade;
+  private Integer grade;
 
-    private ZonedDateTime commentDate;
+  private ZonedDateTime commentDate;
 }

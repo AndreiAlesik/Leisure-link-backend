@@ -1,4 +1,3 @@
 package work.dto.event.get.search;
 
-public record NumberOfPages(Integer number) {
-}
+public record NumberOfPages(Integer number) {}

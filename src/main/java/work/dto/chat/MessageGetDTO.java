@@ -1,7 +1,3 @@
 package work.dto.chat;
 
-public record MessageGetDTO(
-        String message
-) {
-
-}
+public record MessageGetDTO(String message) {}
